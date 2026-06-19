@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta property="og:title" content="Personal Portfolio">
@@ -36,6 +35,17 @@
         </div>
         <h1>{{ title }}</h1>
     </div>
+
+    <main style="max-width: 800px; margin: -20px auto 50px auto; padding: 0 20px;">
+        <section class="card"
+            style="background: white; border-radius: 16px; padding: 30px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); text-align: center; border: 1px solid #f5ebe6;">
+            <h2 style="color: #b85436; font-size: 28px; margin-top: 0; margin-bottom: 15px;">Welcome to My Story! ✨</h2>
+            <p
+                style="font-size: 1.1rem; line-height: 1.7; color: #4a3e3d; margin: 0; text-align: justify; text-justify: inter-word;">
+                {{ about_me }}
+            </p>
+        </section>
+    </main>
 </body>
 
 </html>
