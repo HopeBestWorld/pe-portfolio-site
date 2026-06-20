@@ -55,6 +55,19 @@ EDUCATION_HISTORY = [
     }
 ]
 
+HOBBIES_LIST = [
+    {
+        "name": "Long-Distance Running",
+        "img": "static/img/IMG_4856.jpg",  
+        "description": "Running has been a core piece of my life journey! From middle school 1.5-mile races up to serving as Captain of the JPS Varsity Cross Country and Track teams, I love the endurance, clarity, and mental drive that long-distance running demands."
+    },
+    {
+        "name": "Swimming",
+        "img": "static/img/IMG_8748.jpg", 
+        "description": "I love swimming! It's a great way to stay fit and clear my mind. I've been swimming competitively since I was seven years old and enjoy the discipline and camaraderie it brings."
+    }
+]
+
 @app.route('/')
 def index():
     return render_template(
@@ -63,5 +76,6 @@ def index():
         about_me=ABOUT_ME_TEXT, 
         experiences=WORK_EXPERIENCES,
         education=EDUCATION_HISTORY,
+        hobbies=HOBBIES_LIST, 
         url=os.getenv("URL")
     )
