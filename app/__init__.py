@@ -84,7 +84,14 @@ def index():
         about_me=ABOUT_ME_TEXT, 
         experiences=WORK_EXPERIENCES,
         education=EDUCATION_HISTORY,
-        hobbies=HOBBIES_LIST, 
         locations=TRAVEL_LOCATIONS, 
+        url=os.getenv("URL")
+    )
+@app.route('/hobbies')
+def hobbies():
+    return render_template(
+        'hobbies.html',
+        title="Hope's Hobbies",
+        hobbies=HOBBIES_LIST,
         url=os.getenv("URL")
     )

@@ -89,29 +89,6 @@
         <section style="margin-bottom: 40px;">
             <h2
                 style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
-                Interests & Passions ✨</h2>
-            <div style="display: flex; gap: 20px; flex-wrap: wrap; width: 100%;">
-                {% for item in hobbies %}
-                <div class="card"
-                    style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6; flex: 1; min-width: 280px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
-                    <div style="display: flex; gap: 15px; align-items: flex-start;">
-                        <img src="{{ item.img }}" alt="{{ item.name }}"
-                            style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: #fafafa; border: 1px solid #eee;">
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 8px 0; color: #1C539F; font-size: 19px;">{{ item.name }}</h3>
-                            <p
-                                style="margin: 0; color: #4a3e3d; font-size: 0.95rem; line-height: 1.5; text-align: justify;">
-                                {{ item.description }}</p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </section>
-
-        <section style="margin-bottom: 40px;">
-            <h2
-                style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
                 Places I've Visited 📍</h2>
             <div class="card"
                 style="background: white; border-radius: 16px; padding: 15px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6;">
