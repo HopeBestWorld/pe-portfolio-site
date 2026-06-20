@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/styles/main.css">
+    <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <header class="nav-bar">
+        <div class="nav-content" style="padding-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <a href="/">
+                    <div class="nav-logo">
+                        <img src="./static/img/logo.svg" alt="MLH Logo" />
+                    </div>
+                </a>
+                <nav>
+                    <a href="/"
+                        style="color: white; text-decoration: none; font-weight: 700; margin-right: 20px;">Home</a>
+                    <a href="/hobbies" style="color: #eeb899; text-decoration: none; font-weight: 700;">Hobbies</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="profile" style="height: 200px; padding-top: 30px;">
+        <h1 style="margin: 0;">My Interests & Passions ✨</h1>
+        <p style="color: white; font-size: 1.2rem; margin-top: 10px; opacity: 0.9;">A glimpse into what keeps me moving
+            outside of writing code!</p>
+    </div>
+
+    <main style="max-width: 800px; margin: -20px auto 50px auto; padding: 0 20px; font-family: 'Roboto', sans-serif;">
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; width: 100%;">
+            {% for item in hobbies %}
+            <div class="card"
+                style="background: white; border-radius: 16px; padding: 25px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6; flex: 1; min-width: 320px; box-sizing: border-box;">
+                <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center;">
+                    <img src="{{ item.img }}" alt="{{ item.name }}"
+                        style="width: 100%; max-height: 250px; border-radius: 12px; object-fit: cover; background: #fafafa; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0 0 12px 0; color: #1C539F; font-size: 22px;">{{ item.name }}</h3>
+                        <p
+                            style="margin: 0; color: #4a3e3d; font-size: 1.05rem; line-height: 1.6; text-align: justify; text-justify: inter-word;">
+                            {{ item.description }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+
+</html>
