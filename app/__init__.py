@@ -76,6 +76,11 @@ TRAVEL_LOCATIONS = [
     {"city": "Toronto, Canada", "coords": [43.6532, -79.3832]}
 ]
 
+NAV_BAR_ITEMS = [
+    {"title": "Home", "endpoint": "index"},
+    {"title": "Hobbies", "endpoint": "hobbies"}
+]
+
 @app.route('/')
 def index():
     return render_template(
@@ -85,13 +90,16 @@ def index():
         experiences=WORK_EXPERIENCES,
         education=EDUCATION_HISTORY,
         locations=TRAVEL_LOCATIONS, 
+        nav=NAV_BAR_ITEMS,
         url=os.getenv("URL")
     )
+
 @app.route('/hobbies')
 def hobbies():
     return render_template(
         'hobbies.html',
         title="Hope's Hobbies",
         hobbies=HOBBIES_LIST,
+        nav=NAV_BAR_ITEMS,
         url=os.getenv("URL")
     )

@@ -14,16 +14,18 @@
 <body>
     <header class="nav-bar">
         <div class="nav-content" style="padding-bottom: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                 <a href="/">
                     <div class="nav-logo">
                         <img src="./static/img/logo.svg" alt="MLH Logo" />
                     </div>
                 </a>
                 <nav>
-                    <a href="/"
-                        style="color: white; text-decoration: none; font-weight: 700; margin-right: 20px;">Home</a>
-                    <a href="/hobbies" style="color: #eeb899; text-decoration: none; font-weight: 700;">Hobbies</a>
+                    {% for item in nav %}
+                    <a href="{{ url_for(item.endpoint) }}"
+                        style="color: white; text-decoration: none; font-weight: 700; margin-left: 20px;">{{ item.title
+                        }}</a>
+                    {% endfor %}
                 </nav>
             </div>
         </div>
