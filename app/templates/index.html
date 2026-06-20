@@ -37,7 +37,6 @@
     </div>
 
     <main style="max-width: 800px; margin: -20px auto 50px auto; padding: 0 20px; font-family: 'Roboto', sans-serif;">
-        <!-- About Me Section -->
         <section class="card"
             style="background: white; border-radius: 16px; padding: 30px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); text-align: center; border: 1px solid #f5ebe6; margin-bottom: 40px;">
             <h2 style="color: #b85436; font-size: 28px; margin-top: 0; margin-bottom: 15px;">Welcome to My Story! ✨</h2>
@@ -83,6 +82,30 @@
                 <p style="margin: 0; color: #4a3e3d; line-height: 1.6;">{{ edu.details }}</p>
             </div>
             {% endfor %}
+        </section>
+
+        <section style="margin-bottom: 40px;">
+            <h2
+                style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
+                Interests & Passions ✨</h2>
+
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; width: 100%;">
+                {% for item in hobbies %}
+                <div class="card"
+                    style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6; flex: 1; min-width: 280px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="display: flex; gap: 15px; align-items: flex-start;">
+                        <img src="{{ item.img }}" alt="{{ item.name }}"
+                            style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: #fafafa; border: 1px solid #eee;">
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 8px 0; color: #1C539F; font-size: 19px;">{{ item.name }}</h3>
+                            <p
+                                style="margin: 0; color: #4a3e3d; font-size: 0.95rem; line-height: 1.5; text-align: justify;">
+                                {{ item.description }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </section>
     </main>
 </body>
