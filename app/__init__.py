@@ -31,12 +31,37 @@ WORK_EXPERIENCES = [
     }
 ]
 
+EDUCATION_HISTORY = [
+    {
+        "institution": "Cornell University",
+        "degree": "Master of Professional Studies in Information Science",
+        "location": "Ithaca, NY",
+        "date": "Expected December 2026",
+        "details": "Focusing on human-centered systems, advanced AI infrastructure alignment, and interactive digital design guidelines."
+    },
+    {
+        "institution": "Cornell University",
+        "degree": "B.S. in Computer Science",
+        "location": "Ithaca, NY",
+        "date": "Graduated May 2026",
+        "details": "Academic Honors: Dean's Honor List. Coursework highlights: Machine Learning, Big Data Management, Systems Organization, Object-Oriented Programming, and Information Retrieval."
+    },
+    {
+        "institution": "John P. Stevens High School",
+        "degree": "High School Diploma",
+        "location": "Edison, NJ",
+        "date": "Graduated June 2022",
+        "details": "AP Scholar with Distinction, National Merit Program Commended Student. Active leader as Captain of the Varsity Cross Country and Spring Track & Field teams."
+    }
+]
+
 @app.route('/')
 def index():
     return render_template(
         'index.html', 
         title="Hope Best", 
         about_me=ABOUT_ME_TEXT, 
-        experiences=WORK_EXPERIENCES, # Pass array to frontend
+        experiences=WORK_EXPERIENCES,
+        education=EDUCATION_HISTORY,
         url=os.getenv("URL")
     )
