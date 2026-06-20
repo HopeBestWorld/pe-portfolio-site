@@ -68,6 +68,14 @@ HOBBIES_LIST = [
     }
 ]
 
+TRAVEL_LOCATIONS = [
+    {"city": "Doha, Qatar (AI Health Hackathon)", "coords": [25.2854, 51.5310]},
+    {"city": "Salvador, Brazil", "coords": [-12.9777, -38.5016]},
+    {"city": "São Paulo, Brazil", "coords": [-23.5505, -46.6333]},
+    {"city": "Nassau, Bahamas", "coords": [25.0475, -77.3554]},
+    {"city": "Toronto, Canada", "coords": [43.6532, -79.3832]}
+]
+
 @app.route('/')
 def index():
     return render_template(
@@ -77,5 +85,6 @@ def index():
         experiences=WORK_EXPERIENCES,
         education=EDUCATION_HISTORY,
         hobbies=HOBBIES_LIST, 
+        locations=TRAVEL_LOCATIONS, 
         url=os.getenv("URL")
     )

@@ -15,6 +15,10 @@
 
     <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
     <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <title>{{ title }}</title>
 </head>
 
@@ -50,7 +54,6 @@
             <h2
                 style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
                 My Professional Journey 💼</h2>
-
             {% for job in experiences %}
             <div class="card"
                 style="background: white; border-radius: 16px; padding: 25px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6; margin-bottom: 20px;">
@@ -69,7 +72,6 @@
             <h2
                 style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
                 Education History 🎓</h2>
-
             {% for edu in education %}
             <div class="card"
                 style="background: white; border-radius: 16px; padding: 25px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6; margin-bottom: 20px;">
@@ -88,7 +90,6 @@
             <h2
                 style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
                 Interests & Passions ✨</h2>
-
             <div style="display: flex; gap: 20px; flex-wrap: wrap; width: 100%;">
                 {% for item in hobbies %}
                 <div class="card"
@@ -107,7 +108,36 @@
                 {% endfor %}
             </div>
         </section>
+
+        <section style="margin-bottom: 40px;">
+            <h2
+                style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
+                Places I've Visited 📍</h2>
+            <div class="card"
+                style="background: white; border-radius: 16px; padding: 15px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6;">
+                <div id="map" data-locations='{{ locations|tojson }}'
+                    style="height: 400px; width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                </div>
+            </div>
+        </section>
     </main>
+
+    <script>
+        var map = L.map('map').setView([15, -20], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var mapElement = document.getElementById('map');
+        var locationsData = JSON.parse(mapElement.getAttribute('data-locations') || '[]');
+
+        locationsData.forEach(function (loc) {
+            L.marker([loc.coords[0], loc.coords[1]])
+                .addTo(map)
+                .bindPopup("<b style='font-family: sans-serif; color: #1C539F;'>" + loc.city + "</b>");
+        });
+    </script>
 </body>
 
 </html>
