@@ -65,6 +65,25 @@
             </div>
             {% endfor %}
         </section>
+
+        <section style="margin-bottom: 40px;">
+            <h2
+                style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
+                Education History 🎓</h2>
+
+            {% for edu in education %}
+            <div class="card"
+                style="background: white; border-radius: 16px; padding: 25px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6; margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">
+                    <h3 style="margin: 0; color: #1C539F; font-size: 20px;">{{ edu.institution }}</h3>
+                    <span style="color: #888; font-size: 0.95rem; font-weight: 500;">{{ edu.date }}</span>
+                </div>
+                <h4 style="margin: 5px 0 12px 0; color: #666; font-weight: 500;">{{ edu.degree }} — <span
+                        style="font-size: 0.9em; font-style: italic;">{{ edu.location }}</span></h4>
+                <p style="margin: 0; color: #4a3e3d; line-height: 1.6;">{{ edu.details }}</p>
+            </div>
+            {% endfor %}
+        </section>
     </main>
 </body>
 
