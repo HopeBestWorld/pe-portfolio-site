@@ -4,7 +4,7 @@
 echo "Killing existing tmux sessions..."
 tmux kill-server 2>/dev/null
 
-# 2. Navigate directly into your project directory
+# 2. Navigate directly into project directory
 echo "Navigating to project folder..."
 cd /root/Sub-Challenges/pe-portfolio-site || { echo "Directory not found"; exit 1; }
 
@@ -13,7 +13,7 @@ echo "Fetching latest changes from GitHub..."
 git fetch --all
 git reset origin/main --hard
 
-# 4. Enter your python virtual environment and update dependencies
+# 4. Enter python virtual environment and update dependencies
 echo "Activating virtual environment and updating dependencies..."
 source python3-virtualenv/bin/activate
 pip install -r requirements.txt
