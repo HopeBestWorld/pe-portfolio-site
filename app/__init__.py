@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 load_dotenv()
 app = Flask(__name__)
 
-# 1. Connect to the MySQL database
 db = MySQLDatabase(
     os.getenv("MYSQL_DB"),
     user=os.getenv("MYSQL_USER"),
@@ -17,7 +16,6 @@ db = MySQLDatabase(
     port=3306
 )
 
-# Define the Model
 class TimelinePost(Model):
     name = CharField()
     email = CharField()
@@ -27,11 +25,9 @@ class TimelinePost(Model):
     class Meta:
         database = db
 
-# Create the table if it doesn't already exist
 db.connect()
 db.create_tables([TimelinePost])
 
-# 2. Database Connection Management Hooks
 @app.before_request
 def before_request():
     """Connect to the database before every request."""
@@ -44,7 +40,6 @@ def _db_close(exc):
     if not db.is_closed():
         db.close()
 
-# --- Your Data Objects Remain Exactly the Same ---
 ABOUT_ME_TEXT = (
     "Hi there, I'm Hope! I am a software engineer and graduate student blending a "
     "technical foundation in Computer Science with a passion for Information Science at Cornell University. "
@@ -147,7 +142,6 @@ def hobbies():
     
 @app.route('/timeline')
 def timeline():
-    # Fetch all posts from the database in descending order
     posts = [
         model_to_dict(p)
         for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
