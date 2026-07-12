@@ -1,10 +1,50 @@
 import os
+from peewee import *
+import datetime
+from playhouse.shortcuts import model_to_dict
 from flask import Flask, render_template, request
 from dotenv import load_dotenv
 
 load_dotenv()
 app = Flask(__name__)
 
+# 1. Connect to the MySQL database
+db = MySQLDatabase(
+    os.getenv("MYSQL_DB"),
+    user=os.getenv("MYSQL_USER"),
+    password=os.getenv("MYSQL_PASSWORD"),
+    host=os.getenv("MYSQL_HOST"),
+    port=3306
+)
+
+# Define the Model
+class TimelinePost(Model):
+    name = CharField()
+    email = CharField()
+    content = TextField()
+    created_at = DateTimeField(default=datetime.datetime.now)
+
+    class Meta:
+        database = db
+
+# Create the table if it doesn't already exist
+db.connect()
+db.create_tables([TimelinePost])
+
+# 2. Database Connection Management Hooks
+@app.before_request
+def before_request():
+    """Connect to the database before every request."""
+    if db.is_closed():
+        db.connect()
+
+@app.teardown_request
+def _db_close(exc):
+    """Close the database connection after every request, even if an error occurred."""
+    if not db.is_closed():
+        db.close()
+
+# --- Your Data Objects Remain Exactly the Same ---
 ABOUT_ME_TEXT = (
     "Hi there, I'm Hope! I am a software engineer and graduate student blending a "
     "technical foundation in Computer Science with a passion for Information Science at Cornell University. "
@@ -103,3 +143,37 @@ def hobbies():
         nav=NAV_BAR_ITEMS,
         url=os.getenv("URL")
     )
+# Create POST /api/timeline_post (Add a post)
+@app.route('/api/timeline_post', methods=['POST'])
+def post_time_line_post():
+    name = request.form['name']
+    email = request.form['email']
+    content = request.form['content']
+    
+    timeline_post = TimelinePost.create(name=name, email=email, content=content)
+    
+    return model_to_dict(timeline_post)
+
+# Create GET /api/timeline_post (Retrieve all posts)
+@app.route('/api/timeline_post', methods=['GET'])
+def get_time_line_post():
+    return {
+        'timeline_posts': [
+            model_to_dict(p)
+            for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
+        ]
+    }
+
+# Bonus: Create DELETE /api/timeline_post (Delete a specific post by ID)
+@app.route('/api/timeline_post', methods=['DELETE'])
+def delete_time_line_post():
+    post_id = request.form.get('id')
+    if not post_id:
+        return {"error": "Missing 'id' parameter"}, 400
+        
+    try:
+        post = TimelinePost.get_by_id(post_id)
+        post.delete_instance()
+        return {"message": f"Successfully deleted post with id {post_id}"}, 200
+    except DoesNotExist:  # <-- Change TimelinePost.DoesNotExist to just DoesNotExist
+        return {"error": "Post not found"}, 404
