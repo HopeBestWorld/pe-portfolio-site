@@ -1,28 +1,25 @@
 #!/bin/bash
 
-# 1. Kill all existing tmux sessions to stop the background Flask server
-echo "Killing existing tmux sessions..."
-tmux kill-server 2>/dev/null
+echo "🔄 Starting automated site redeployment..."
 
-# 2. Navigate directly into project directory
-echo "Navigating to project folder..."
-cd /root/Sub-Challenges/pe-portfolio-site || { echo "Directory not found"; exit 1; }
+# 1. Navigate to the project folder
+echo "📁 Navigating to project folder..."
+cd /root/Sub-Challenges/pe-portfolio-site || exit
 
-# 3. Fetch latest code changes from GitHub and force update
-echo "Fetching latest changes from GitHub..."
+# 2. Fetch the absolute latest code changes from GitHub
+echo "📥 Fetching latest changes from GitHub..."
 git fetch --all
-git reset origin/main --hard
+git reset --hard origin/main
 
-# 4. Enter python virtual environment and update dependencies
-echo "Activating virtual environment and updating dependencies..."
+# 3. Activate the virtual environment and install dependencies
+echo "🐍 Activating virtual environment and updating dependencies..."
 source python3-virtualenv/bin/activate
 pip install -r requirements.txt
+# Ensuring our database driver and crypto libraries are present
+pip install pymysql cryptography
 
-# 5. Start a new detached Tmux session and run the server
-echo "Launching Flask app inside a new detached tmux session..."
-tmux new-session -d -s portfolio
+# 4. Restart the systemd portfolio service
+echo "🚀 Restarting myportfolio systemd service..."
+sudo systemctl restart myportfolio
 
-# Send the activation and startup commands directly to the background tmux session
-tmux send-keys -t portfolio "cd /root/Sub-Challenges/pe-portfolio-site && source python3-virtualenv/bin/activate && flask run --host=0.0.0.0" C-m
-
-echo "Deployment complete! Your updated site is live."
+echo "✅ Deployment complete! Your updated site is live and running as a service."
