@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "=== Starting API Endpoints Test ==="
+echo "Starting API Endpoints Test"
 
 RANDOM_NUM=$((1000 + RANDOM % 9000))
 TEST_NAME="Tester-$RANDOM_NUM"
@@ -17,7 +17,7 @@ RESPONSE=$(curl -s -X POST http://localhost:5001/api/timeline_post \
 POST_ID=$(echo "$RESPONSE" | grep -o '"id": *[0-9]*' | grep -o '[0-9]*')
 
 if [ -z "$POST_ID" ]; then
-    echo "❌ Error: Failed to create post or retrieve valid ID."
+    echo "Error: Failed to create post or retrieve valid ID."
     exit 1
 else
     echo "Success: Created post with ID: $POST_ID"
