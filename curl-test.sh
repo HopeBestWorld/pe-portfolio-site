@@ -2,7 +2,6 @@
 
 echo "=== Starting API Endpoints Test ==="
 
-# 1. Generate random data to test unique entries
 RANDOM_NUM=$((1000 + RANDOM % 9000))
 TEST_NAME="Tester-$RANDOM_NUM"
 TEST_EMAIL="tester$RANDOM_NUM@test.com"
@@ -10,41 +9,37 @@ TEST_CONTENT="Automated test content generation script #$RANDOM_NUM"
 
 echo "Creating a new timeline post for $TEST_NAME..."
 
-# 2. Make the POST request and extract the created post ID from the JSON response
 RESPONSE=$(curl -s -X POST http://localhost:5001/api/timeline_post \
   -d "name=$TEST_NAME" \
   -d "email=$TEST_EMAIL" \
   -d "content=$TEST_CONTENT")
 
-# Extract the ID out of the raw response text
 POST_ID=$(echo "$RESPONSE" | grep -o '"id": *[0-9]*' | grep -o '[0-9]*')
 
 if [ -z "$POST_ID" ]; then
     echo "❌ Error: Failed to create post or retrieve valid ID."
     exit 1
 else
-    echo "✅ Success: Created post with ID: $POST_ID"
+    echo "Success: Created post with ID: $POST_ID"
 fi
 
-# 3. Make a GET request and verify our random string is present in the database feed
 echo "Checking GET endpoint for our new post..."
 GET_RESPONSE=$(curl -s http://localhost:5001/api/timeline_post)
 
 if [[ "$GET_RESPONSE" == *"$TEST_CONTENT"* ]]; then
-    echo "✅ Success: Found our unique test content in the timeline database!"
+    echo "Success: Found our unique test content in the timeline database!"
 else
-    echo "❌ Error: Could not find the newly added post content in the GET response."
+    echo "Error: Could not find the newly added post content in the GET response."
     exit 1
 fi
 
-# 4. Bonus: Clean up by deleting our test entry using the DELETE endpoint
 echo "Cleaning up: Triggering DELETE for post ID: $POST_ID..."
 DELETE_RESPONSE=$(curl -s -X DELETE http://localhost:5001/api/timeline_post -d "id=$POST_ID")
 
 if [[ "$DELETE_RESPONSE" == *"Successfully deleted"* ]]; then
-    echo "✅ Success: Database cleaned up properly."
+    echo "Success: Database cleaned up properly."
 else
-    echo "⚠️ Warning: Cleanup failed or returned an unexpected message."
+    echo "Warning: Cleanup failed or returned an unexpected message."
 fi
 
 echo "=== All Tests Completed Successfully ==="
