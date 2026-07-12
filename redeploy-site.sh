@@ -19,7 +19,7 @@ pip install -r requirements.txt
 pip install pymysql cryptography
 
 # 4. Restart the systemd portfolio service
-echo "🚀 Restarting myportfolio systemd service..."
+echo "Restarting myportfolio systemd service..."
 sudo systemctl restart myportfolio
 
-echo "✅ Deployment complete! Your updated site is live and running as a service."
+echo "✅ Deployment complete! Updated site is live and running as a service."
