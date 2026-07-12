@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+
+<body>
+    <main class="container">
+        <a href="/">← Back to Home</a>
+
+        <h2>✨ My Journey Timeline</h2>
+        <p>Share an update or check out where I've been!</p>
+
+        <form id="timeline-form">
+            <div class="grid">
+                <label for="name">Name
+                    <input type="text" id="name" name="name" required placeholder="Your Name">
+                </label>
+                <label for="email">Email
+                    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                </label>
+            </div>
+            <label for="content">What's new?</label>
+            <textarea id="content" name="content" required placeholder="Write your update here..."></textarea>
+
+            <button type="submit">Submit Post</button>
+        </form>
+
+        <hr>
+
+        <h3>Recent Updates</h3>
+        <div id="timeline-posts">
+            {% for post in timeline_posts %}
+            <article>
+                <header>
+                    <strong>{{ post.name }}</strong>
+                    <small style="float: right;">{{ post.created_at }}</small>
+                </header>
+                <p>{{ post.content }}</p>
+                <footer><small>📩 {{ post.email }}</small></footer>
+            </article>
+            {% else %}
+            <p id="no-posts">No updates yet. Be the first to add one!</p>
+            {% endfor %}
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('timeline-form').addEventListener('submit', function (e) {
+            e.preventDefault(); // Stop standard form redirect
+
+            const formData = new URLSearchParams(new FormData(this));
+
+            // Target port 5001 explicitly based on your local macOS environment setup
+            fetch('/api/timeline_post', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Instantly inject the newly created post structure at the top of the feed
+                    const container = document.getElementById('timeline-posts');
+                    const noPostsMsg = document.getElementById('no-posts');
+                    if (noPostsMsg) noPostsMsg.remove();
+
+                    const newArticle = document.createElement('article');
+                    newArticle.innerHTML = `
+                    <header>
+                        <strong>${data.name}</strong> 
+                        <small style="float: right;">Just now</small>
+                    </header>
+                    <p>${data.content}</p>
+                    <footer><small>📩 ${data.email}</small></footer>
+                `;
+                    container.insertBefore(newArticle, container.firstChild);
+
+                    // Reset the input fields completely
+                    document.getElementById('timeline-form').reset();
+                })
+                .catch(error => console.error('Error adding timeline post:', error));
+        });
+    </script>
+</body>
+
+</html>

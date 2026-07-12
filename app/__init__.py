@@ -118,7 +118,8 @@ TRAVEL_LOCATIONS = [
 
 NAV_BAR_ITEMS = [
     {"title": "Home", "endpoint": "index"},
-    {"title": "Hobbies", "endpoint": "hobbies"}
+    {"title": "Hobbies", "endpoint": "hobbies"},
+    {"title": "Timeline", "endpoint": "timeline"}
 ]
 
 @app.route('/')
@@ -143,6 +144,16 @@ def hobbies():
         nav=NAV_BAR_ITEMS,
         url=os.getenv("URL")
     )
+    
+@app.route('/timeline')
+def timeline():
+    # Fetch all posts from the database in descending order
+    posts = [
+        model_to_dict(p)
+        for p in TimelinePost.select().order_by(TimelinePost.created_at.desc())
+    ]
+    return render_template('timeline.html', title="Timeline", timeline_posts=posts, nav=NAV_BAR_ITEMS)
+
 # Create POST /api/timeline_post (Add a post)
 @app.route('/api/timeline_post', methods=['POST'])
 def post_time_line_post():
@@ -177,3 +188,4 @@ def delete_time_line_post():
         return {"message": f"Successfully deleted post with id {post_id}"}, 200
     except DoesNotExist:  # <-- Change TimelinePost.DoesNotExist to just DoesNotExist
         return {"error": "Post not found"}, 404
+    
