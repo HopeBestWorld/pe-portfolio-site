@@ -10,8 +10,7 @@ app = Flask(__name__)
 
 if os.getenv("TESTING") == "true":
     print("Running in test mode")
-    db = SqliteDatabase('file:memory?mode=memory&cache=shared',
-                        uri=True)
+    db = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
 else:
     db = MySQLDatabase(
         os.getenv("MYSQL_DB"),
@@ -42,6 +41,10 @@ def before_request():
 @app.teardown_request
 def _db_close(exc):
     """Close the database connection after every request, even if an error occurred."""
+    # Skip closing during tests: closing drops the in-memory SQLite tables,
+    # breaking any test that makes more than one request.
+    if os.getenv("TESTING") == "true":
+        return
     if not db.is_closed():
         db.close()
 
