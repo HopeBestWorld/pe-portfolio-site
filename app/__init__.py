@@ -1,4 +1,5 @@
 import os
+import re
 from peewee import *
 import datetime
 from playhouse.shortcuts import model_to_dict
@@ -8,12 +9,16 @@ from dotenv import load_dotenv
 load_dotenv()
 app = Flask(__name__)
 
-db = MySQLDatabase(
-    os.getenv("MYSQL_DB"),
-    user=os.getenv("MYSQL_USER"),
-    password=os.getenv("MYSQL_PASSWORD"),
-    host=os.getenv("MYSQL_HOST"),
-    port=3306
+if os.getenv("TESTING") == "true":
+    print("Running in test mode")
+    db = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
+else:
+    db = MySQLDatabase(
+        os.getenv("MYSQL_DB"),
+        user=os.getenv("MYSQL_USER"),
+        password=os.getenv("MYSQL_PASSWORD"),
+        host=os.getenv("MYSQL_HOST"),
+        port=3306
 )
 
 class TimelinePost(Model):
@@ -37,6 +42,10 @@ def before_request():
 @app.teardown_request
 def _db_close(exc):
     """Close the database connection after every request, even if an error occurred."""
+    # Skip closing during tests: closing drops the in-memory SQLite tables,
+    # breaking any test that makes more than one request.
+    if os.getenv("TESTING") == "true":
+        return
     if not db.is_closed():
         db.close()
 
@@ -93,12 +102,12 @@ EDUCATION_HISTORY = [
 HOBBIES_LIST = [
     {
         "name": "Long-Distance Running",
-        "img": "static/img/IMG_4856.jpg",  
+        "img": "static/img/IMG_4856.jpg",
         "description": "Running has been a core piece of my life journey! From middle school 1.5-mile races up to serving as Captain of the JPS Varsity Cross Country and Track teams, I love the endurance, clarity, and mental drive that long-distance running demands."
     },
     {
         "name": "Swimming",
-        "img": "static/img/IMG_8748.jpg", 
+        "img": "static/img/IMG_8748.jpg",
         "description": "I love swimming! It's a great way to stay fit and clear my mind. I've been swimming competitively since I was seven years old and enjoy the discipline and camaraderie it brings."
     }
 ]
@@ -120,12 +129,12 @@ NAV_BAR_ITEMS = [
 @app.route('/')
 def index():
     return render_template(
-        'index.html', 
-        title="Hope Best", 
-        about_me=ABOUT_ME_TEXT, 
+        'index.html',
+        title="Hope Best",
+        about_me=ABOUT_ME_TEXT,
         experiences=WORK_EXPERIENCES,
         education=EDUCATION_HISTORY,
-        locations=TRAVEL_LOCATIONS, 
+        locations=TRAVEL_LOCATIONS,
         nav=NAV_BAR_ITEMS,
         url=os.getenv("URL")
     )
@@ -139,7 +148,7 @@ def hobbies():
         nav=NAV_BAR_ITEMS,
         url=os.getenv("URL")
     )
-    
+
 @app.route('/timeline')
 def timeline():
     posts = [
@@ -151,12 +160,23 @@ def timeline():
 # Create POST /api/timeline_post (Add a post)
 @app.route('/api/timeline_post', methods=['POST'])
 def post_time_line_post():
-    name = request.form['name']
-    email = request.form['email']
-    content = request.form['content']
-    
+    # Reject missing name instead of raising a KeyError
+    name = request.form.get('name')
+    if not name:
+        return "Invalid name", 400
+
+    # Reject missing or malformed email addresses
+    email = request.form.get('email')
+    if not email or not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email):
+        return "Invalid email", 400
+
+    # Reject missing or empty content
+    content = request.form.get('content')
+    if not content:
+        return "Invalid content", 400
+
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
-    
+
     return model_to_dict(timeline_post)
 
 # Create GET /api/timeline_post (Retrieve all posts)
@@ -175,11 +195,11 @@ def delete_time_line_post():
     post_id = request.form.get('id')
     if not post_id:
         return {"error": "Missing 'id' parameter"}, 400
-        
+
     try:
         post = TimelinePost.get_by_id(post_id)
         post.delete_instance()
         return {"message": f"Successfully deleted post with id {post_id}"}, 200
     except DoesNotExist:  # <-- Change TimelinePost.DoesNotExist to just DoesNotExist
         return {"error": "Post not found"}, 404
-    
+
