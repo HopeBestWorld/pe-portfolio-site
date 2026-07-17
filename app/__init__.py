@@ -1,4 +1,5 @@
 import os
+import re
 from peewee import *
 import datetime
 from playhouse.shortcuts import model_to_dict
@@ -159,9 +160,20 @@ def timeline():
 # Create POST /api/timeline_post (Add a post)
 @app.route('/api/timeline_post', methods=['POST'])
 def post_time_line_post():
-    name = request.form['name']
-    email = request.form['email']
-    content = request.form['content']
+    # Reject missing name instead of raising a KeyError
+    name = request.form.get('name')
+    if not name:
+        return "Invalid name", 400
+
+    # Reject missing or malformed email addresses
+    email = request.form.get('email')
+    if not email or not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email):
+        return "Invalid email", 400
+
+    # Reject missing or empty content
+    content = request.form.get('content')
+    if not content:
+        return "Invalid content", 400
 
     timeline_post = TimelinePost.create(name=name, email=email, content=content)
 
