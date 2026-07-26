@@ -1,7 +1,8 @@
-version: '3.8'
+version: "3"
 
 services:
   myportfolio:
+    container_name: myportfolio
     build: .
     restart: always
     env_file:
@@ -9,14 +10,14 @@ services:
     environment:
       - FLASK_ENV=development
     ports:
-      - "5000:5000"
+      - "5001:5000"
     volumes:
       - .:/myportfolio
     depends_on:
       - mysql
-
   mysql:
-    image: mariadb:10.11
+    container_name: mysql
+    image: mariadb
     restart: always
     env_file:
       - .env

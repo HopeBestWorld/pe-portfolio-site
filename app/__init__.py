@@ -9,17 +9,18 @@ from dotenv import load_dotenv
 load_dotenv()
 app = Flask(__name__)
 
+# Initialize Peewee Database Connection
 if os.getenv("TESTING") == "true":
     print("Running in test mode")
     db = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
 else:
     db = MySQLDatabase(
-        os.getenv("MYSQL_DB"),
+        os.getenv("MYSQL_DATABASE"),
         user=os.getenv("MYSQL_USER"),
         password=os.getenv("MYSQL_PASSWORD"),
         host=os.getenv("MYSQL_HOST"),
         port=3306
-)
+    )
 
 class TimelinePost(Model):
     name = CharField()
@@ -30,6 +31,7 @@ class TimelinePost(Model):
     class Meta:
         database = db
 
+# Connect and create tables
 db.connect()
 db.create_tables([TimelinePost])
 
