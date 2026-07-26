@@ -6,20 +6,16 @@ echo "🔄 Starting automated site redeployment..."
 echo "📁 Navigating to project folder..."
 cd /root/Sub-Challenges/pe-portfolio-site || exit
 
-# 2. Fetch the absolute latest code changes from GitHub
+# 2. Fetch and hard reset to latest main branch
 echo "📥 Fetching latest changes from GitHub..."
-git fetch --all
-git reset --hard origin/main
+git fetch && git reset origin/main --hard
 
-# 3. Activate the virtual environment and install dependencies
-echo "🐍 Activating virtual environment and updating dependencies..."
-source python3-virtualenv/bin/activate
-pip install -r requirements.txt
-# Ensuring our database driver and crypto libraries are present
-pip install pymysql cryptography
+# 3. Spin down existing containers to prevent OOM issues during build
+echo "🛑 Stopping running Docker containers..."
+docker compose -f docker-compose.prod.yml down
 
-# 4. Restart the systemd portfolio service
-echo "Restarting myportfolio systemd service..."
-sudo systemctl restart myportfolio
+# 4. Rebuild and restart production containers in detached mode
+echo "🚀 Building and starting containers..."
+docker compose -f docker-compose.prod.yml up -d --build
 
-echo "✅ Deployment complete! Updated site is live and running as a service."
+echo "✅ Redeployment complete!"
