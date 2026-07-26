@@ -41,9 +41,11 @@ except Exception as e:
 
 @app.before_request
 def before_request():
-    """Connect to the database before every request."""
+    """Connect to the database before every request and ensure tables exist."""
     if db.is_closed():
         db.connect()
+    # Ensure tables exist even if startup creation was skipped
+    db.create_tables([TimelinePost])
 
 @app.teardown_request
 def _db_close(exc):
