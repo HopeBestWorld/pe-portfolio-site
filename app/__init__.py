@@ -15,10 +15,10 @@ if os.getenv("TESTING") == "true":
     db = SqliteDatabase('file:memory?mode=memory&cache=shared', uri=True)
 else:
     db = MySQLDatabase(
-        os.getenv("MYSQL_DATABASE"),
+        os.getenv("MYSQL_DATABASE") or os.getenv("MYSQL_DB"),
         user=os.getenv("MYSQL_USER"),
         password=os.getenv("MYSQL_PASSWORD"),
-        host=os.getenv("MYSQL_HOST"),
+        host=os.getenv("MYSQL_HOST", "mysql"),
         port=3306
     )
 
@@ -31,9 +31,13 @@ class TimelinePost(Model):
     class Meta:
         database = db
 
-# Connect and create tables
-db.connect()
-db.create_tables([TimelinePost])
+# Safely attempt connection on boot
+try:
+    if db.is_closed():
+        db.connect()
+    db.create_tables([TimelinePost])
+except Exception as e:
+    print(f"Database connection deferred on startup: {e}")
 
 @app.before_request
 def before_request():
