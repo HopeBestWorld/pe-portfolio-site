@@ -3,18 +3,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta property="og:title" content="Personal Portfolio">
-    <meta property="og:description" content="My Personal Portfolio">
-    <meta property="og:url" content="{{ url }}">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-
-    <link lang='sass' rel="stylesheet" href="./static/styles/main.css">
-    <link rel='icon' href='./static/img/favicon.ico' type='image/x-icon' />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/styles/main.css">
+    <link rel="icon" href="./static/img/favicon.ico" type="image/x-icon" />
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -24,104 +17,85 @@
 
 <body>
     <header class="nav-bar">
-        <div class="nav-content" style="padding-bottom: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                <a href="/">
-                    <div class="nav-logo">
-                        <img src="./static/img/logo.svg" alt="MLH Logo" />
-                    </div>
-                </a>
-                <nav>
-                    {% for item in nav %}
-                    <a href="{{ url_for(item.endpoint) }}"
-                        style="color: white; text-decoration: none; font-weight: 700; margin-left: 20px;">{{ item.title
-                        }}</a>
-                    {% endfor %}
-                </nav>
-            </div>
+        <div class="nav-content">
+            <a href="/" class="nav-logo">
+                <img src="./static/img/logo.svg" alt="MLH Logo" />
+            </a>
+            <nav class="nav-links">
+                {% for item in nav %}
+                <a href="{{ url_for(item.endpoint) }}">{{ item.title }}</a>
+                {% endfor %}
+            </nav>
         </div>
     </header>
 
     <div class="profile">
-        <div id="profile-picture" class="profile-picture">
+        <div class="profile-picture">
             <img src="./static/img/lauren-1011042273-1.jpg" alt="Hope Best Profile Photo">
         </div>
         <h1>{{ title }}</h1>
     </div>
 
-    <main style="max-width: 800px; margin: -20px auto 50px auto; padding: 0 20px; font-family: 'Roboto', sans-serif;">
-        <section class="card"
-            style="background: white; border-radius: 16px; padding: 30px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); text-align: center; border: 1px solid #f5ebe6; margin-bottom: 40px;">
-            <h2 style="color: #b85436; font-size: 28px; margin-top: 0; margin-bottom: 15px;">Welcome to My Story! ✨</h2>
-            <p
-                style="font-size: 1.1rem; line-height: 1.7; color: #4a3e3d; margin: 0; text-align: justify; text-justify: inter-word;">
+    <main class="main-container">
+        <section class="card" style="text-align: center;">
+            <h2 style="color: var(--accent-color); margin-top: 0;">Welcome to My Story! ✨</h2>
+            <p style="font-size: 1.05rem; line-height: 1.7; color: #4a3e3d; text-align: justify; margin: 0;">
                 {{ about_me }}
             </p>
         </section>
 
-        <section style="margin-bottom: 40px;">
-            <h2
-                style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
-                My Professional Journey 💼</h2>
+        <section>
+            <h2 class="section-title">My Professional Journey 💼</h2>
             {% for job in experiences %}
-            <div class="card"
-                style="background: white; border-radius: 16px; padding: 25px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6; margin-bottom: 20px;">
+            <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">
-                    <h3 style="margin: 0; color: #1C539F; font-size: 20px;">{{ job.role }}</h3>
-                    <span style="color: #888; font-size: 0.95rem; font-weight: 500;">{{ job.date }}</span>
+                    <h3 style="margin: 0; color: var(--primary-color); font-size: 1.25rem;">{{ job.role }}</h3>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">{{ job.date }}</span>
                 </div>
-                <h4 style="margin: 5px 0 12px 0; color: #666; font-weight: 500;">{{ job.company }} — <span
-                        style="font-size: 0.9em; font-style: italic;">{{ job.location }}</span></h4>
-                <p style="margin: 0; color: #4a3e3d; line-height: 1.6;">{{ job.description }}</p>
+                <h4 style="margin: 4px 0 12px 0; color: #555; font-weight: 500;">
+                    {{ job.company }} — <em>{{ job.location }}</em>
+                </h4>
+                <p style="margin: 0; line-height: 1.6; color: #4a3e3d;">{{ job.description }}</p>
             </div>
             {% endfor %}
         </section>
 
-        <section style="margin-bottom: 40px;">
-            <h2
-                style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
-                Education History 🎓</h2>
+        <section>
+            <h2 class="section-title">Education History 🎓</h2>
             {% for edu in education %}
-            <div class="card"
-                style="background: white; border-radius: 16px; padding: 25px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6; margin-bottom: 20px;">
+            <div class="card">
                 <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">
-                    <h3 style="margin: 0; color: #1C539F; font-size: 20px;">{{ edu.institution }}</h3>
-                    <span style="color: #888; font-size: 0.95rem; font-weight: 500;">{{ edu.date }}</span>
+                    <h3 style="margin: 0; color: var(--primary-color); font-size: 1.25rem;">{{ edu.institution }}</h3>
+                    <span style="color: var(--text-muted); font-size: 0.9rem;">{{ edu.date }}</span>
                 </div>
-                <h4 style="margin: 5px 0 12px 0; color: #666; font-weight: 500;">{{ edu.degree }} — <span
-                        style="font-size: 0.9em; font-style: italic;">{{ edu.location }}</span></h4>
-                <p style="margin: 0; color: #4a3e3d; line-height: 1.6;">{{ edu.details }}</p>
+                <h4 style="margin: 4px 0 12px 0; color: #555; font-weight: 500;">
+                    {{ edu.degree }} — <em>{{ edu.location }}</em>
+                </h4>
+                <p style="margin: 0; line-height: 1.6; color: #4a3e3d;">{{ edu.details }}</p>
             </div>
             {% endfor %}
         </section>
 
-        <section style="margin-bottom: 40px;">
-            <h2
-                style="color: #b85436; font-size: 28px; border-bottom: 2px dashed #eeb899; padding-bottom: 8px; margin-bottom: 20px;">
-                Places I've Visited 📍</h2>
-            <div class="card"
-                style="background: white; border-radius: 16px; padding: 15px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6;">
+        <section>
+            <h2 class="section-title">Places I've Visited 📍</h2>
+            <div class="card" style="padding: 12px;">
                 <div id="map" data-locations='{{ locations|tojson }}'
-                    style="height: 400px; width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                </div>
+                    style="height: 380px; width: 100%; border-radius: 12px;"></div>
             </div>
         </section>
     </main>
 
     <script>
         var map = L.map('map').setView([15, -20], 2);
-
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        var mapElement = document.getElementById('map');
-        var locationsData = JSON.parse(mapElement.getAttribute('data-locations') || '[]');
-
+        var locationsData = JSON.parse(document.getElementById('map').getAttribute('data-locations') || '[]');
         locationsData.forEach(function (loc) {
             L.marker([loc.coords[0], loc.coords[1]])
                 .addTo(map)
-                .bindPopup("<b style='font-family: sans-serif; color: #1C539F;'>" + loc.city + "</b>");
+                .bindPopup("<b style='color: #1C539F;'>" + loc.city + "</b>");
         });
     </script>
 </body>

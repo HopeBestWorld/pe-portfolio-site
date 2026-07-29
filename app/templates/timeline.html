@@ -5,57 +5,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./static/styles/main.css">
+    <link rel="icon" href="./static/img/favicon.ico" type="image/x-icon" />
 </head>
 
 <body>
-    <main class="container">
-        <a href="/">← Back to Home</a>
-
-        <h2>✨ My Journey Timeline</h2>
-        <p>Share an update or check out where I've been!</p>
-
-        <form id="timeline-form">
-            <div class="grid">
-                <label for="name">Name
-                    <input type="text" id="name" name="name" required placeholder="Your Name">
-                </label>
-                <label for="email">Email
-                    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
-                </label>
-            </div>
-            <label for="content">What's new?</label>
-            <textarea id="content" name="content" required placeholder="Write your update here..."></textarea>
-
-            <button type="submit">Submit Post</button>
-        </form>
-
-        <hr>
-
-        <h3>Recent Updates</h3>
-        <div id="timeline-posts">
-            {% for post in timeline_posts %}
-            <article>
-                <header>
-                    <strong>{{ post.name }}</strong>
-                    <small style="float: right;">{{ post.created_at }}</small>
-                </header>
-                <p>{{ post.content }}</p>
-                <footer><small>📩 {{ post.email }}</small></footer>
-            </article>
-            {% else %}
-            <p id="no-posts">No updates yet. Be the first to add one!</p>
-            {% endfor %}
+    <header class="nav-bar">
+        <div class="nav-content">
+            <a href="/" class="nav-logo">
+                <img src="./static/img/logo.svg" alt="MLH Logo" />
+            </a>
+            <nav class="nav-links">
+                {% for item in nav %}
+                <a href="{{ url_for(item.endpoint) }}">{{ item.title }}</a>
+                {% endfor %}
+            </nav>
         </div>
+    </header>
+
+    <div class="profile" style="height: auto; padding-bottom: 50px;">
+        <h1>✨ My Journey Timeline</h1>
+        <p style="opacity: 0.9;">Share an update or see where I've been recently!</p>
+    </div>
+
+    <main class="main-container">
+        <section class="card">
+            <h2 style="color: var(--accent-color); margin-top: 0; margin-bottom: 20px;">Add an Update</h2>
+            <form id="timeline-form">
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;" class="form-group">
+                    <div style="flex: 1; min-width: 240px;">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" class="form-control" required placeholder="Your Name">
+                    </div>
+                    <div style="flex: 1; min-width: 240px;">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" required
+                            placeholder="your.email@example.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">What's new?</label>
+                    <textarea id="content" name="content" class="form-control" rows="4" required
+                        placeholder="Write your update here..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Submit Post</button>
+            </form>
+        </section>
+
+        <section>
+            <h2 class="section-title">Recent Updates</h2>
+            <div id="timeline-posts">
+                {% for post in timeline_posts %}
+                <div class="card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <strong style="color: var(--primary-color); font-size: 1.1rem;">{{ post.name }}</strong>
+                        <small style="color: var(--text-muted);">{{ post.created_at }}</small>
+                    </div>
+                    <p style="line-height: 1.6; margin-bottom: 12px; color: #333;">{{ post.content }}</p>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">📩 {{ post.email }}</div>
+                </div>
+                {% else %}
+                <p id="no-posts" style="text-align: center; color: var(--text-muted);">No updates yet. Be the first to
+                    add one!</p>
+                {% endfor %}
+            </div>
+        </section>
     </main>
 
     <script>
         document.getElementById('timeline-form').addEventListener('submit', function (e) {
-            e.preventDefault(); // Stop standard form redirect
+            e.preventDefault();
 
             const formData = new URLSearchParams(new FormData(this));
 
-            // Target port 5001 explicitly based on your local macOS environment setup
             fetch('/api/timeline_post', {
                 method: 'POST',
                 body: formData,
@@ -65,23 +92,21 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    // Instantly inject the newly created post structure at the top of the feed
                     const container = document.getElementById('timeline-posts');
                     const noPostsMsg = document.getElementById('no-posts');
                     if (noPostsMsg) noPostsMsg.remove();
 
-                    const newArticle = document.createElement('article');
-                    newArticle.innerHTML = `
-                    <header>
-                        <strong>${data.name}</strong> 
-                        <small style="float: right;">Just now</small>
-                    </header>
-                    <p>${data.content}</p>
-                    <footer><small>📩 ${data.email}</small></footer>
+                    const newCard = document.createElement('div');
+                    newCard.className = 'card';
+                    newCard.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <strong style="color: var(--primary-color); font-size: 1.1rem;">${data.name}</strong>
+                        <small style="color: var(--text-muted);">Just now</small>
+                    </div>
+                    <p style="line-height: 1.6; margin-bottom: 12px; color: #333;">${data.content}</p>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">📩 ${data.email}</div>
                 `;
-                    container.insertBefore(newArticle, container.firstChild);
-
-                    // Reset the input fields completely
+                    container.insertBefore(newCard, container.firstChild);
                     document.getElementById('timeline-form').reset();
                 })
                 .catch(error => console.error('Error adding timeline post:', error));
