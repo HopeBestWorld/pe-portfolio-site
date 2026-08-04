@@ -37,18 +37,16 @@
             outside of writing code!</p>
     </div>
 
-    <main style="max-width: 800px; margin: -20px auto 50px auto; padding: 0 20px; font-family: 'Roboto', sans-serif;">
-        <div style="display: flex; gap: 20px; flex-wrap: wrap; width: 100%;">
+    <main class="main-container">
+        <div class="grid-container">
             {% for item in hobbies %}
-            <div class="card"
-                style="background: white; border-radius: 16px; padding: 25px; box-shadow: 0 6px 16px rgba(0,0,0,0.02); border: 1px solid #f5ebe6; flex: 1; min-width: 320px; box-sizing: border-box;">
+            <div class="card">
                 <div style="display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center;">
                     <img src="{{ item.img }}" alt="{{ item.name }}"
                         style="width: 100%; max-height: 250px; border-radius: 12px; object-fit: cover; background: #fafafa; border: 1px solid #eee; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                     <div style="flex: 1;">
                         <h3 style="margin: 0 0 12px 0; color: #1C539F; font-size: 22px;">{{ item.name }}</h3>
-                        <p
-                            style="margin: 0; color: #4a3e3d; font-size: 1.05rem; line-height: 1.6; text-align: justify; text-justify: inter-word;">
+                        <p style="margin: 0; color: #4a3e3d; font-size: 1rem; line-height: 1.6;">
                             {{ item.description }}
                         </p>
                     </div>
