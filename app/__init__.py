@@ -58,8 +58,8 @@ def _db_close(exc):
         db.close()
 
 ABOUT_ME_TEXT = (
-    "Hi there, I'm Hope! I am a software engineer and graduate student blending a "
-    "technical foundation in Computer Science with a passion for Information Science at Cornell University. "
+    "Hi there, I'm Hope! I am a software engineer and graduate student with a "
+    "technical foundation in Computer Science and a passion for Information Science at Cornell University. "
     "Whether I'm engineering software systems, optimizing machine learning pipelines, "
     "or collaborating on digital space research, I love creating technology that drives meaningful, strategic impact. "
     "When I'm not writing code, you can find me running long-distance trails, capturing snapshots behind a camera, "
